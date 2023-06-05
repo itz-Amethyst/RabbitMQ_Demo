@@ -23,9 +23,16 @@ channel.QueueDeclare(queueName , false , false , false  , null);
 
 channel.QueueBind(queueName , exchangeName , routingKey , null);
 
-byte[] messageBody = Encoding.UTF8.GetBytes("Hello World");
+for (int i = 0; i < 60; i++)
+{
+    Console.WriteLine($"Sending Message : {i}");
 
-channel.BasicPublish(exchangeName , routingKey , null , messageBody);
+    byte[] messageBody = Encoding.UTF8.GetBytes($"Message #{i}");
+
+    channel.BasicPublish(exchangeName, routingKey, null, messageBody);
+
+    Thread.Sleep(1000);
+}
 
 
 channel.Close();
