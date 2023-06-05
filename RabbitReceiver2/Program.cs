@@ -22,14 +22,14 @@ channel.QueueDeclare(queueName, false, false, false, null);
 
 channel.QueueBind(queueName, exchangeName, routingKey, null);
 
-channel.BasicQos(0 , 1 , false);
+channel.BasicQos(0, 1, false);
 
 var consumer = new EventingBasicConsumer(channel);
 
 consumer.Received += (sender, args) =>
 {
-    //! To takes application some time to work
-    Task.Delay(TimeSpan.FromSeconds(5)).Wait();
+    //? This will Receive Faster
+    Task.Delay(TimeSpan.FromSeconds(3)).Wait();
 
     var body = args.Body.ToArray();
 
@@ -37,10 +37,10 @@ consumer.Received += (sender, args) =>
 
     Console.WriteLine($"Message Received : {message}");
 
-    channel.BasicAck(args.DeliveryTag , false);
+    channel.BasicAck(args.DeliveryTag, false);
 };
 
-string consumerTag = channel.BasicConsume(queueName , false , consumer);
+string consumerTag = channel.BasicConsume(queueName, false, consumer);
 
 //? To leave Console Running until then messages sent in
 Console.ReadLine();
@@ -49,4 +49,4 @@ channel.BasicCancel(consumerTag);
 
 channel.Close();
 
-cnn.Close( );
+cnn.Close();
